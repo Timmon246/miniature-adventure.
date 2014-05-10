@@ -53,29 +53,55 @@ public class ShipGame {
 		System.out.println("---");
 	}
 	
+	private void buildShip() {
+		System.out.println("Build menu:");
+		System.out.println("0. Generic Ship (100G)");
+		System.out.println("1. Trade Ship (250G)");
+		System.out.print("Enter a choice: ");
+		System.out.println(" ");
+		int shipClass = scanner.nextInt();
+		switch (shipClass) {
+		case 0:
+			money -= 100;
+			System.out.println("The ship will be ready in 7 days.");
+			queue.add(new BuildShip(shipClass, 7));
+			break;
+		case 1:
+			money -= 250;
+			System.out.println("The ship will be ready in 10 days.");
+			queue.add(new BuildShip(shipClass, 10));
+			break;
+		default:
+			System.out.println("Invalid choice");
+			
+		}
+	}
+	
 	private void mainMenu() {
 		System.out.println("Main menu:");
 		System.out.println("0. Wait a few days");
 		System.out.println("1. Send ship to barter");
-		System.out.println("2. Send ship out for combat");
-		System.out.println("3.Send ship out for repair");
+		System.out.println("2. Build a new ship");
+		//System.out.println("3. Send ship out for combat");
+		//System.out.println("4. Send ship out for repair");
 		System.out.print("Enter a choice: ");
 		
-		int choice = scanner.nextInt();
-		
-		switch (choice) {
+		switch (scanner.nextInt()) {
 		case 0:
-			waitMenu();
+			waitMenu();//Wait # of days
 			break;
 		case 1:
-			sendShip();
+			sendShip();//Send ship out to trade
 			break;
-//		case 2:
-//			sendShip();
-//			break;
-//		case 3:
-//			sendShip();
-//			break;
+		case 2:
+			buildShip();//Build ship
+			break;
+		case 3:
+			//repairShip();//send ship out for repair
+			break;
+		case 4:
+			//send ship out for combat perhaps a fleet
+			break;
 		default:
 			System.out.println("Invalid choice");
 		}
@@ -101,18 +127,12 @@ public class ShipGame {
 		if (days >= 0) clock += days;
 	}
 	
-	private void sendShip() {
+	private void sendShip() { // To go on a Bartering Mission
 		int shipno = chooseShip();
 		if (shipno < 0) return;
 		int goneFor = 1 + random.nextInt(7);
 		System.out.println(dock.get(shipno).name + " will be gone for " + goneFor + " day(s).");
-		
-		// Schedule a BarterEvent
-				//queue.add(new BarterEvent(dock.remove(shipno), (clock + goneFor)));
-		// Schedule a Combat Event
-				queue.add(new Combat(dock.remove(shipno), (clock + goneFor)));
-		// Schedule a Repair Event
-				//queue.add(new Repair(dock.remove(shipno), (clock + goneFor)));
+		queue.add(new BarterEvent(dock.remove(shipno), (clock + goneFor)));
 		
 	}
 	
