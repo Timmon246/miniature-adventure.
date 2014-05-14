@@ -21,6 +21,7 @@ public class ShipGame {
 	int clock;
 	Scanner scanner;
 	Random random;
+	int shipCost = 100;
 	
 	public ShipGame() {
 		queue = new PriorityQueue<ShipEvent>(100, new Comparator<ShipEvent>() {
@@ -62,20 +63,27 @@ public class ShipGame {
 		int shipClass = scanner.nextInt();
 		switch (shipClass) {
 		case 0:
-			money -= 100;
-			System.out.println("The ship will be ready in 7 days.");
-			queue.add(new BuildShip(shipClass, 7));
-			break;
+			if (money >= 100){
+				money -= 100;
+				System.out.println("The ship will be ready in 7 days.");
+				queue.add(new BuildShip(shipClass, 7));
+				break;
+			}
+			else{break;}
 		case 1:
-			money -= 250;
-			System.out.println("The ship will be ready in 10 days.");
-			queue.add(new BuildShip(shipClass, 10));
-			break;
+			if (money >= 250){
+				money -= 250;
+				System.out.println("The ship will be ready in 10 days.");
+				queue.add(new BuildShip(shipClass, 10));
+				break;
+			}
+			else{break;}
 		default:
 			System.out.println("Invalid choice");
 			
 		}
 	}
+
 	
 	private void mainMenu() {
 		System.out.println("Main menu:");
@@ -97,7 +105,7 @@ public class ShipGame {
 			buildShip();//Build ship
 			break;
 		case 3:
-			//repairShip();//send ship out for repair
+			//send ship out for repair
 			break;
 		case 4:
 			//send ship out for combat perhaps a fleet
@@ -133,10 +141,10 @@ public class ShipGame {
 		int goneFor = 1 + random.nextInt(7);
 		System.out.println(dock.get(shipno).name + " will be gone for " + goneFor + " day(s).");
 		queue.add(new BarterEvent(dock.remove(shipno), (clock + goneFor)));
-		
 	}
 	
 	public void start() {
+		//start StormyNight?
 		//Check it out! The classic event-processing loop
 		while (true) {
 			pollEvents();
