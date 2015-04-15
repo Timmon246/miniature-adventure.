@@ -54,44 +54,72 @@ public class ShipGame {
 		System.out.println("---");
 	}
 	
-	private void buildShip() {
+	private void buildShip() { // Build a new Ship
 		System.out.println("Build menu:");
-		System.out.println("0. Generic Ship (100G)");
-		System.out.println("1. Trade Ship (250G)");
+		System.out.println("0. Generic Ship (" + shipCost + "G)");
+		System.out.println("1. Trade Ship (" + (shipCost + 150) + "G)");
 		System.out.print("Enter a choice: ");
 		System.out.println(" ");
 		int shipClass = scanner.nextInt();
 		switch (shipClass) {
 		case 0:
-			if (money >= 100){
+			if (money >= shipCost){
 				money -= 100;
-				System.out.println("The ship will be ready in 7 days.");
-				queue.add(new BuildShip(shipClass, 7));
+				System.out.println("The ship will be ready in 6 days.");
+				queue.add(new BuildShip(shipClass, 6));
+				shipCost += 25;
 				break;
 			}
-			else{break;}
+			else{
+				System.out.println("Not enough money.");
+				break;
+				}
 		case 1:
-			if (money >= 250){
+			if (money >= (shipCost + 150)){
 				money -= 250;
 				System.out.println("The ship will be ready in 10 days.");
 				queue.add(new BuildShip(shipClass, 10));
+				shipCost += 50;
 				break;
 			}
-			else{break;}
+			else{
+				System.out.println("Not enough money.");
+				break;
+				}
 		default:
 			System.out.println("Invalid choice");
 			
 		}
 	}
 
+//	private void repairMenu() { // Repair a Ship
+//		int shipRepair = chooseShip();
+//		if (shipRepair < 0) return;
+//		System.out.println("It will cost 1G per day for 1Hp plus a day for each 10Hp.");
+//		System.out.println("How much damage would you like to repair?");
+//		int damageRepair = scanner.nextInt();
+//		System.out.println(dock.get(shipRepair).name + " will be gone for " + ((damageRepair / 10) + 1) + " day(s) and cost " + damageRepair + "G for " + damageRepair + " health.");
+//		if (money >= damageRepair){
+//			money -= damageRepair;
+//			int repair = damageRepair;
+//			queue.add(new Repair(dock.remove(shipRepair), (clock + ((damageRepair / 10) + 1))));
+//		}
+//	}
+	
+	private void combatMenu(){
+		int shipCombat = chooseShip();
+		if (shipCombat < 0) return;
+		System.out.println(dock.get(shipCombat).name + " will be gone for 6 days looking for trouble.");
+		queue.add(new LookForTrouble(dock.remove(shipCombat), 6));
+	}
 	
 	private void mainMenu() {
 		System.out.println("Main menu:");
 		System.out.println("0. Wait a few days");
 		System.out.println("1. Send ship to barter");
 		System.out.println("2. Build a new ship");
-		//System.out.println("3. Send ship out for combat");
-		//System.out.println("4. Send ship out for repair");
+		System.out.println("3. Send ship out for repair");
+		System.out.println("4. Send ship out for combat");
 		System.out.print("Enter a choice: ");
 		
 		switch (scanner.nextInt()) {
@@ -105,10 +133,10 @@ public class ShipGame {
 			buildShip();//Build ship
 			break;
 		case 3:
-			//send ship out for repair
+			//repairMenu();//send ship out for repair
 			break;
 		case 4:
-			//send ship out for combat perhaps a fleet
+			combatMenu();//send ship out for combat perhaps a fleet
 			break;
 		default:
 			System.out.println("Invalid choice");
@@ -123,7 +151,7 @@ public class ShipGame {
 		
 		for (int i = 0; i < dock.size(); i++)
 			System.out.println(i + ". " + dock.get(i));
-		System.out.println("Select a ship");
+		System.out.print("Select a ship");
 		int choice = scanner.nextInt();
 		if (choice >= dock.size()) choice = -1;
 		return choice;
