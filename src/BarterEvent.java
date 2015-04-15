@@ -4,7 +4,7 @@ public class BarterEvent extends ShipEvent {
 		public void process(ShipGame game) {
 			int damage = game.random.nextInt(10);
 			if (damage >= ship.hp)
-				System.out.println("Ship " + ship.name + " was destroyed!");
+				game.queue.add(new DestroyedEvent(ship, 3));
 			else {
 				ship.hp -= damage;
 				int profit = game.random.nextInt(ship.value);

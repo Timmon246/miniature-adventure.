@@ -6,5 +6,6 @@ public class Ship {
 		
 		public Ship() {name = "Jenny"; hp = 100; value = 100;}
 		
+		
 		public String toString() {return "[" + name + " HP: " + hp + " Value: " + value + "]";}
 	}
